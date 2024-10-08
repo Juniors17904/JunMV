@@ -62,6 +62,13 @@ public class ConfBD extends SQLiteOpenHelper{
         db.close(); // Cerrar la conexión a la base de datos
     }
 
+    // Método para eliminar un tema en la base de datos
+    public boolean deleteTema(String tema) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int rowsDeleted = db.delete(TABLE_TEMAS, COLUMN_TEMA + " = ?", new String[]{tema});
+        db.close();
+        return rowsDeleted > 0; // Retorna verdadero si se eliminó al menos una fila
+    }
 
 
     // Método para obtener todos los temas de la base de datos

@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
@@ -66,12 +68,14 @@ public class MainActivity extends AppCompatActivity {
         fabEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String temaSeleccionado = spTemas.getSelectedItem().toString(); // Obtener el tema seleccionado
-                int position = spTemas.getSelectedItemPosition(); // Obtener la posición del tema seleccionado
-
-                // Mostrar el diálogo para editar el tema
-                EditTemaDialog editTemaDialog = new EditTemaDialog(MainActivity.this, temasList, adapter, dbHelper, temaSeleccionado, position);
-                editTemaDialog.show();
+                String temaSeleccionado = spTemas.getSelectedItem() != null ? spTemas.getSelectedItem().toString() : null; // Verifica si hay un ítem seleccionado
+                if (temaSeleccionado != null) {
+                    int position = spTemas.getSelectedItemPosition(); // Obtener la posición del tema seleccionado
+                    EditTemaDialog editTemaDialog = new EditTemaDialog(MainActivity.this, temasList, adapter, dbHelper, temaSeleccionado, position);
+                    editTemaDialog.show(); // Mostrar el diálogo para editar el tema
+                } else {
+                    Toast.makeText(MainActivity.this, "No existe tema para editar.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -80,8 +84,17 @@ public class MainActivity extends AppCompatActivity {
         fabBorrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Lógica para borrar un tema (puedes implementar la lógica aquí)
+                String temaSeleccionado = spTemas.getSelectedItem() != null ? spTemas.getSelectedItem().toString() : null; // Asegúrate de no obtener una referencia nula
+                if (temaSeleccionado != null) {
+                    DeleteTemaDialog deleteTemaDialog = new DeleteTemaDialog(MainActivity.this, temasList, adapter, dbHelper, temaSeleccionado);
+                    deleteTemaDialog.show(); // Mostrar el diálogo para confirmar la eliminación
+                } else {
+                    Toast.makeText(MainActivity.this, "No existe tema para eliminar", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+
+
+
     }
 }
